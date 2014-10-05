@@ -70,7 +70,7 @@ The default theme is called `theme_gray()`. An alternative theme that I much pre
 qplot(x, y) + theme_classic()
 ```
 
-Other themes are `theme_bw()`, `theme_linedraw()`, `theme_light()`, and `theme_minimal`, which all differ slightly in the way they draw the background grid:
+Other themes are `theme_bw()`, `theme_linedraw()`, `theme_light()`, and `theme_minimal()`, which all differ slightly in the way they draw the background grid:
 ```{r}
 qplot(x, y) + theme_bw()
 ```
@@ -86,7 +86,7 @@ qplot(x, y) + theme_minimal()
 
 ### Changing label fonts, sizes, etc.
 
-The default themes R provides all define a scaling factor called `base_size`, which allows us to change the overall font size. A base size of 14 is a much better option for the figure size chosen in this document (5in by 3.5in), and it is what we used in `theme_cow()` throughout this document.
+All the default themes that R provides define a scaling factor called `base_size`, which allows us to change the overall font size. A base size of 14 is a much better option for the figure size chosen in this document (5in by 3.5in), and it is what we used in `theme_cow()` throughout this document.
 ```{r}
 qplot(x, y) + theme_classic(base_size=14)
 ```
