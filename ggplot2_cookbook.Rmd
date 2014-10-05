@@ -1,0 +1,94 @@
+---
+title: "Wilke lab ggplot2 cookbook"
+author: "Claus Wilke"
+date: "October 4, 2014"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    fig_width: 5
+    fig_height: 3.5
+---
+```{r echo=FALSE, message=FALSE}
+require(ggplot2)
+```
+
+The ggplot2 package in R provides superior graphing capabilities. Unfortunately, it has so many different options and use cases that frequently it is difficult to figure out how exactly to obtain a specific result one wants. In this document, I hope to collect over time a number of important use cases and tips, so that this can serve as a reference document for beginning and intermediate users of ggplot2.
+
+# Introduction to ggplot2
+
+The basic philosophy of ggplot2 is fundamentally different from that of most other graphing libraries. In most graphing libraries, you worry about how to place dots, lines, and other shapes onto a canvas. In ggplot2, by contrast, you think about mapping specific variables onto specific visual aspects of a graph (aesthetics in the language of ggplot2). In a simple $x$-$y$ scatter plot, for example, you map the variable $x$ onto a location along the horizontal axis and the variable $y$ onto a location along the vertical axis. But, and this is the power of ggplot2, you can also map variables onto point shape, point size, point color, and so on.
+
+Let's start with a very simple example. We define a data set that contains the squares and cubes of the first four integers:
+```{r}
+d <- data.frame( number=c(1:4, 1:4),
+                 transformed=c((1:4)^2, (1:4)^3),
+                 transform.type=factor(c(rep('square',4), c(rep('cube',4))))
+                 )
+d
+```
+Now we plot this data set, mapping the number onto the $x$ axis, the transformed number (i.e., either the square or the cube of the original number) onto the $y$ axis, and type of the transformation (square or cube) onto the color of the points.
+```{r}
+theme_cow <- function() theme_classic(base_size=14)
+ggplot(data=d, aes(x=number, y=transformed, colour=transform.type)) + geom_point() + theme_cow()
+```
+
+The function `ggplot()` sets up the basic plot, the function `aes()` handles the aesthetic mapping, and `geom_point()` specifies that we want to plot the data as points. The function `theme_cow()` I defined makes ggplot2 use a sane default design. More on this in a later chapter.
+
+The plot we just made has a drawback for color-blind people: They may not be able to see the difference between points that differ in color but in no other attribute. Therefore, we may want to mape the transform type to the shape of the points as well:
+```{r}
+ggplot(data=d, aes(x=number, y=transformed, colour=transform.type, shape=transform.type)) + geom_point() + theme_cow()
+```
+
+And, if we want to get really fancy, we may also want to convey the magnitude of the transformed value in the size of the points:
+```{r}
+ggplot(data=d, aes(x=number, y=transformed, size=transformed, colour=transform.type, shape=transform.type)) + geom_point() + theme_cow()
+```
+
+
+
+
+# Plot design and theming
+
+The default plot theme of ggplot2 is not very good, in my opinion. Let's consider a very simple figure:
+
+```{r}
+x <- 1:10; y <- x^2
+qplot(x, y)
+```
+
+The figure contains a fair amount of [chartjunk](http://en.wikipedia.org/wiki/Chartjunk), i.e., visual elements that are not necessary to comprehend the information represented in the graph. Most importantly, the figure is dominated by the background grid, which conveys no information but distracts from the points. In addition, both the labels and the points are small.
+
+## Modifying the plot theme
+
+ggplot2 has a powerful theming interace that allows us to modify practically every element of a figure. It also contains several built-in themes that create a specific overall look.
+
+### Changing the overall look
+
+The default theme is called `theme_gray()`. An alternative theme that I much prefer is called `theme_classic()`. It creates a very simple, traditional look:
+```{r}
+qplot(x, y) + theme_classic()
+```
+
+Other themes are `theme_bw()`, `theme_linedraw()`, `theme_light()`, and `theme_minimal`, which all differ slightly in the way they draw the background grid:
+```{r}
+qplot(x, y) + theme_bw()
+```
+```{r}
+qplot(x, y) + theme_linedraw()
+```
+```{r}
+qplot(x, y) + theme_light()
+```
+```{r}
+qplot(x, y) + theme_minimal()
+```
+
+### Changing label fonts, sizes, etc.
+
+The default themes R provides all define a scaling factor called `base_size`, which allows us to change the overall font size. A base size of 14 is a much better option for the figure size chosen in this document (5in by 3.5in), and it is what we used in `theme_cow()` throughout this document.
+```{r}
+qplot(x, y) + theme_classic(base_size=14)
+```
+
+
